@@ -10,16 +10,7 @@ namespace assignment_2_stack
 	{
 		public int Row { get; }
 		public int Column { get; }
-
-		public Point(int row, int column)
-		{
-			Row = row;
-			Column = column;
-		}
-
-		public override string ToString()
-		{
-			return $"[{Row},{Column}]";
-		}
+		public Point(int row, int column) => (Row,  Column) = (row, column);
+		public override string ToString() => $"[{Row}, {Column}]";
 	}
 }

@@ -14,7 +14,7 @@ namespace assignment_2_stack
 	{
 		public T Element { get; set; }
 		public Node<T>? Next { get; set; }
-		public Node<T>? Previous { get; set; }
+	    ///public Node<T>? Previous { get; set; }
 
 		/// <summary>
 		/// Constructor for Node class.
@@ -22,11 +22,11 @@ namespace assignment_2_stack
 		/// <param name="element"></param>
 		/// <param name="previousNode"></param>
 		/// <param name="nextNode"></param>
-		public Node(T element = default, Node<T> previousNode = null, Node<T> nextNode = null)
+		public Node(T element = default, Node<T> nextNode = null)
 		{
 			Element = element;
 			Next = nextNode;
-			Previous = previousNode;
+			///Previous = previousNode;
 		}
 	}
 }
