@@ -25,13 +25,14 @@ namespace assignment_2_stack
 		{
 			CharMaze = existingMaze;
 
-			if (CharMaze[startingRow][startingColumn] == 'W' || CharMaze[startingRow][startingColumn] == 'E')
-				throw new ApplicationException();
-			
-			StartingPoint =  new Point(startingRow, startingColumn);
+			if (CharMaze[startingRow][startingColumn] == 'W' || 
+				CharMaze[startingRow][startingColumn] == 'E')
+					throw new ApplicationException();
 
 			if (startingColumn >= ColumnLength || startingColumn < 0)
 				throw new IndexOutOfRangeException();
+
+			StartingPoint =  new Point(startingRow, startingColumn);
 
 			path = new Stack<Point>();
 		}
@@ -40,7 +41,16 @@ namespace assignment_2_stack
 
 		public string PrintMaze()
 		{
-			throw new NotImplementedException();
+			string maze = "";
+			for (int r = 0; r < RowLength; r++)
+			{
+				for (int c = 0; c < ColumnLength; c++)
+					maze += CharMaze[r][c];
+
+				if (r < RowLength - 1)
+					maze += "\n";
+			}
+			return maze;
 		}
 
 		public string DepthFirstSearch()
