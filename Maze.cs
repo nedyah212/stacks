@@ -26,9 +26,9 @@ namespace assignment_2_stack
 			CharMaze = existingMaze;
 			StartingPoint =  new Point(startingRow, startingColumn);
 
-			if (startingColumn >= ColumnLength)
+			if (startingColumn >= ColumnLength || startingColumn < 0)
 				throw new IndexOutOfRangeException();
-
+			
 			path = new Stack<Point>();
 		}
 
