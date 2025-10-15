@@ -24,11 +24,15 @@ namespace assignment_2_stack
 		public Maze(int startingRow, int startingColumn, char[][] existingMaze)
 		{
 			CharMaze = existingMaze;
+
+			if (CharMaze[startingRow][startingColumn] == 'W' || CharMaze[startingRow][startingColumn] == 'E')
+				throw new ApplicationException();
+			
 			StartingPoint =  new Point(startingRow, startingColumn);
 
 			if (startingColumn >= ColumnLength || startingColumn < 0)
 				throw new IndexOutOfRangeException();
-			
+
 			path = new Stack<Point>();
 		}
 
