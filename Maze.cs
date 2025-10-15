@@ -42,7 +42,7 @@ namespace assignment_2_stack
 
 		public Stack<Point> GetPathToFollow()
 		{
-			throw new NotImplementedException();
+			throw new ApplicationException();
 		}
 	}
 }
