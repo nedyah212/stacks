@@ -9,15 +9,16 @@ namespace assignment_2_stack
 	public class Maze
 	{
 		public Point StartingPoint { get; set; }
-		public int RowLength { get; }
-		public int ColumnLength { get; }
+		public int RowLength { get => CharMaze.Length; }
+		public int ColumnLength { get => CharMaze[0].Length; }
 
 		private char[][] CharMaze;
 		private Stack<Point> path;
 
 		public Maze(string filename)
 		{
-			throw new NotImplementedException();
+			string[] fileLines = File.ReadAllLines(filename);
+			
 		}
 
 		public Maze(int startingRow, int startingColumn, char[][] existingMaze)
