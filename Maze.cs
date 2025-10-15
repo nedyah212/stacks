@@ -18,7 +18,25 @@ namespace assignment_2_stack
 		public Maze(string filename)
 		{
 			string[] fileLines = File.ReadAllLines(filename);
-			
+
+			string[] dimensions = fileLines[0].Split(' ');
+			int rows = int.Parse(dimensions[0]);
+			int columns = int.Parse(dimensions[1]);
+
+			string[] startPos = fileLines[1].Split(' ');
+			int startRow = int.Parse(startPos[0]);
+			int startColumn = int.Parse(startPos[1]);
+
+			CharMaze = new char[rows][];
+
+			for (int i = 0; i < rows; i++)
+			{
+				CharMaze[i] = fileLines[i + 2].ToCharArray();
+			}
+
+			StartingPoint = new Point(startRow, startColumn);
+
+			path = new Stack<Point>();
 		}
 
 		public Maze(int startingRow, int startingColumn, char[][] existingMaze)
