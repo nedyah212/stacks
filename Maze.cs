@@ -21,7 +21,6 @@ namespace assignment_2_stack
 
 			string[] dimensions = fileLines[0].Split(' ');
 			int rows = int.Parse(dimensions[0]);
-			int columns = int.Parse(dimensions[1]);
 
 			string[] startPosition = fileLines[1].Split(' ');
 			int startRow = int.Parse(startPosition[0]);
@@ -77,6 +76,7 @@ namespace assignment_2_stack
 			
 			while (!Path.IsEmpty() == false)
 				currentPosition = Path.Top();
+				return "string";
 								
 		}
 
