@@ -13,7 +13,7 @@ namespace assignment_2_stack
 		public int ColumnLength { get => CharMaze[0].Length; }
 
 		private char[][] CharMaze;
-		private Stack<Point> path;
+		private Stack<Point> Path;
 
 		public Maze(string filename)
 		{
@@ -23,20 +23,19 @@ namespace assignment_2_stack
 			int rows = int.Parse(dimensions[0]);
 			int columns = int.Parse(dimensions[1]);
 
-			string[] startPos = fileLines[1].Split(' ');
-			int startRow = int.Parse(startPos[0]);
-			int startColumn = int.Parse(startPos[1]);
+			string[] startPosition = fileLines[1].Split(' ');
+			int startRow = int.Parse(startPosition[0]);
+			int startColumn = int.Parse(startPosition[1]);
 
 			CharMaze = new char[rows][];
 
-			for (int i = 0; i < rows; i++)
+			for (int i = 0; i < RowLength; i++)
 			{
 				CharMaze[i] = fileLines[i + 2].ToCharArray();
 			}
 
 			StartingPoint = new Point(startRow, startColumn);
-
-			path = new Stack<Point>();
+			Path = new Stack<Point>();
 		}
 
 		public Maze(int startingRow, int startingColumn, char[][] existingMaze)
@@ -51,8 +50,7 @@ namespace assignment_2_stack
 				throw new IndexOutOfRangeException();
 
 			StartingPoint =  new Point(startingRow, startingColumn);
-
-			path = new Stack<Point>();
+			Path = new Stack<Point>();
 		}
 
 		public char[][] GetMaze() => CharMaze;
@@ -73,7 +71,13 @@ namespace assignment_2_stack
 
 		public string DepthFirstSearch()
 		{
-			throw new NotImplementedException();
+			Point currentPosition = StartingPoint;
+			Path.Push(currentPosition);
+			CharMaze[currentPosition.Row][currentPosition.Column] = 'V';
+			
+			while (!Path.IsEmpty() == false)
+				currentPosition = Path.Top();
+								
 		}
 
 		public Stack<Point> GetPathToFollow()
