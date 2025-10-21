@@ -105,29 +105,21 @@ namespace assignment_2_stack
 					Point point;
 					TestMessage = ($"Path to follow from Start {StartingPoint.ToString()} to Exit {Path.Top()} - {pathSize} steps:\n");
 
+					Stack<Point> reversedPath = Path.Copy(pathSize, reversed: true);
+
 					for (int i = 0; i < pathSize; i++)
 					{
-						point = Path.Pop();
-						tempStack1.Push(point);
+						point = reversedPath.Pop();
+						TestMessage += $"{point.ToString()}\n";
+						
 						if (CharMaze[point.Row][point.Column] != 'E')
 							CharMaze[point.Row][point.Column] = '.';
 					}
 
-					Stack<Point> tempStack2 = new Stack<Point>();
-					for (int i = 0; i < pathSize; i++)
-					{
-						point = tempStack1.Pop();
-						TestMessage += $"{point.ToString()}\n";
-						tempStack2.Push(point);
-					}
-
-					for (int i = 0; i < pathSize; i++)
-					{
-						tempStack1.Push(tempStack2.Pop());
-					}
+					Path = Path.Copy(pathSize, reversed: true);
+					break;
 				}
 			}
-			Path = tempStack1;
 			return $"{TestMessage}{PrintMaze()}";
 		}
 
@@ -156,7 +148,7 @@ namespace assignment_2_stack
 
 			return character;
 		}
-		
+
 		private void InspectLocation(int rowModifier, int columnModifier)
 		{
 			Path.Push(new Point(Path.Top().Row + (rowModifier), Path.Top().Column + (columnModifier)));
