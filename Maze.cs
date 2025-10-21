@@ -16,6 +16,7 @@ namespace assignment_2_stack
 		private Stack<Point> Path;
 
 		private string TestMessage = "No exit found in maze!\n\n";
+		private bool ExitStatus = false;
 
 		public Maze(string filename)
 		{
@@ -74,48 +75,45 @@ namespace assignment_2_stack
 		{
 			Point currentPosition = StartingPoint;
 			Path.Push(currentPosition);
-			SetChar('V');
-			bool exit = false;
-			Stack<Point> tempPath = new Stack<Point>();
-
+			CharMaze[Path.Top().Row][Path.Top().Column] = 'V';
+			Stack<Point> copyPath = new Stack<Point>();
 			while (!Path.IsEmpty())
-			{	
+			{
 				//Check left
-				if (IsSpace(GetChar(0, -1)))
-					exit = InspectLocation(0,-1);
-
+				if (IsSpace(GetChar(0, -1)) || IsExit(GetChar(0, -1)))
+					InspectLocation(0, -1);
 				//Check right
-				else if (IsSpace(GetChar(0, 1)))
-					exit = InspectLocation(0, 1);
-
+				
+				else if (IsSpace(GetChar(0, 1)) || IsExit(GetChar(0, 1)))
+					InspectLocation(0, 1);
 				//Check down
-				else if (IsSpace(GetChar(1, 0)))
-					exit = InspectLocation(1,0);
-
+				
+				else if (IsSpace(GetChar(1, 0)) || IsExit(GetChar(1, 0)))
+					InspectLocation(1, 0);
 				//Check up
-				else if (IsSpace(GetChar(-1, 0)))
-					exit = InspectLocation(-1, 0);
-
-				else 
+				
+				else if (IsSpace(GetChar(-1, 0)) || IsExit(GetChar(-1, 0)))
+					InspectLocation(-1, 0);
+				
+				else
 					Path.Pop();
 
-				if (exit)
+				if (ExitStatus == true)
 				{
-					tempPath = Path;
-
+					TestMessage = "";
+					int pathSize = Path.Size;
 					Point point;
-					for(int i = 0; i < Path.Size; i++)
+					for (int i = 0; i < pathSize; i++)
 					{
 						point = Path.Pop();
-						tempPath.Push(point);
-						SetChar('.');
-
+						copyPath.Push(point);
+						TestMessage += point.ToString();
+						CharMaze[point.Row][point.Column] = '.';
 					}
 				}
 			}
 
-			Path = tempPath;
-			Console.WriteLine(Path);
+			Path = copyPath;
 			return $"{TestMessage}{PrintMaze()}";
 		}
 
@@ -125,7 +123,7 @@ namespace assignment_2_stack
 		}
 
 		private static bool IsSpace(char target) => target == ' ';
-		private static bool IsExit(char target) => target == 'E';
+		private bool IsExit(char target) => ExitStatus = target == 'E';
 
 		private char GetChar(int rowModifier, int columnModifier)
 		{
@@ -136,25 +134,13 @@ namespace assignment_2_stack
 			else if (columnModifier != 0 && 1 == Math.Abs(columnModifier))
 				character = CharMaze[Path.Top().Row][Path.Top().Column + columnModifier];
 
-			else if (rowModifier == 0 && columnModifier == 0)
-				character = CharMaze[Path.Top().Row][Path.Top().Column];
-
 			return character;
 		}
 		
-		private void SetChar(char character)
+		private void InspectLocation(int rowModifier, int columnModifier)
 		{
-			CharMaze[Path.Top().Row][Path.Top().Column] = character;
-		}
-		
-		private bool InspectLocation(int rowModifier, int columnModifier)
-		{
-			bool exit = false;
-			if (IsExit(GetChar(0, 0)))
-				exit = true;
 			Path.Push(new Point(Path.Top().Row + (rowModifier), Path.Top().Column + (columnModifier)));
-			SetChar('V');
-			return exit;
+			CharMaze[Path.Top().Row][Path.Top().Column] = 'V';
 		}
 	}
 }
