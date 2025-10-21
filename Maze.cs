@@ -73,6 +73,7 @@ namespace assignment_2_stack
 
 		public string DepthFirstSearch()
 		{
+			Console.WriteLine(PrintMaze());
 			Point currentPosition = StartingPoint;
 			Path.Push(currentPosition);
 			CharMaze[Path.Top().Row][Path.Top().Column] = 'V';
@@ -104,7 +105,8 @@ namespace assignment_2_stack
 					{
 						point = Path.Pop();
 						copyPath.Push(point);
-						CharMaze[point.Row][point.Column] = '.';
+						if (CharMaze[point.Row][point.Column] != 'E')
+							CharMaze[point.Row][point.Column] = '.';
 					}
 
 					for (int i = 0; i < pathSize; i++)
@@ -114,7 +116,7 @@ namespace assignment_2_stack
 					}
 				}
 			}
-
+			Console.WriteLine(PrintMaze());
 			Path = copyPath;
 
 			return $"{TestMessage}{PrintMaze()}";
@@ -143,7 +145,8 @@ namespace assignment_2_stack
 		private void InspectLocation(int rowModifier, int columnModifier)
 		{
 			Path.Push(new Point(Path.Top().Row + (rowModifier), Path.Top().Column + (columnModifier)));
-			CharMaze[Path.Top().Row][Path.Top().Column] = 'V';
+			if (CharMaze[Path.Top().Row][Path.Top().Column] != 'E')
+				CharMaze[Path.Top().Row][Path.Top().Column] = 'V';
 		}
 	}
 }
