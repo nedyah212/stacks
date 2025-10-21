@@ -79,41 +79,44 @@ namespace assignment_2_stack
 			Stack<Point> copyPath = new Stack<Point>();
 			while (!Path.IsEmpty())
 			{
-				//Check left
-				if (IsSpace(GetChar(0, -1)) || IsExit(GetChar(0, -1)))
-					InspectLocation(0, -1);
+				//Check down
+				if (IsSpace(GetChar(1, 0)) || IsExit(GetChar(1, 0)))
+					InspectLocation(1, 0);
 				//Check right
-				
 				else if (IsSpace(GetChar(0, 1)) || IsExit(GetChar(0, 1)))
 					InspectLocation(0, 1);
-				//Check down
-				
-				else if (IsSpace(GetChar(1, 0)) || IsExit(GetChar(1, 0)))
-					InspectLocation(1, 0);
+				//Check left
+				else if (IsSpace(GetChar(0, -1)) || IsExit(GetChar(0, -1)))
+					InspectLocation(0, -1);
 				//Check up
-				
 				else if (IsSpace(GetChar(-1, 0)) || IsExit(GetChar(-1, 0)))
 					InspectLocation(-1, 0);
-				
 				else
 					Path.Pop();
 
 				if (ExitStatus == true)
 				{
-					TestMessage = "";
 					int pathSize = Path.Size;
 					Point point;
+					TestMessage = ($"Path to follow from Start {StartingPoint.ToString()} to Exit {Path.Top()} - 27 steps:\n");
+
 					for (int i = 0; i < pathSize; i++)
 					{
 						point = Path.Pop();
 						copyPath.Push(point);
-						TestMessage += point.ToString();
 						CharMaze[point.Row][point.Column] = '.';
+					}
+
+					for (int i = 0; i < pathSize; i++)
+					{
+						point = copyPath.Pop();
+						TestMessage += $"{point.ToString()}\n";
 					}
 				}
 			}
 
 			Path = copyPath;
+
 			return $"{TestMessage}{PrintMaze()}";
 		}
 
