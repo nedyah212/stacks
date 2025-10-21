@@ -15,6 +15,8 @@ namespace assignment_2_stack
 		private char[][] CharMaze;
 		private Stack<Point> Path;
 
+		private string TestMessage = "No exit found in maze!\n\n";
+
 		public Maze(string filename)
 		{
 			string[] fileLines = File.ReadAllLines(filename);
@@ -74,43 +76,47 @@ namespace assignment_2_stack
 			Path.Push(currentPosition);
 			SetChar('V');
 			bool exit = false;
+			Stack<Point> tempPath = new Stack<Point>();
 
-			while (!Path.IsEmpty() || exit == false)
+			while (!Path.IsEmpty())
 			{	
-	
 				//Check left
-				if (IsSpace(InspectLocation(0, -1)))
-				{
-					Path.Push(new Point(Path.Top().Row, Path.Top().Column - 1));
-					SetChar('V');
-				}
+				if (IsSpace(GetChar(0, -1)))
+					exit = InspectLocation(0,-1);
 
 				//Check right
-				else if (IsSpace(InspectLocation(0, 1)))
-				{
-					Path.Push(new Point(Path.Top().Row, Path.Top().Column + 1));
-					SetChar('V');
-				}
+				else if (IsSpace(GetChar(0, 1)))
+					exit = InspectLocation(0, 1);
 
 				//Check down
-				else if (IsSpace(InspectLocation(1, 0)))
-				{
-					Path.Push(new Point(Path.Top().Row + 1, Path.Top().Column));
-					SetChar('V');
-				}
+				else if (IsSpace(GetChar(1, 0)))
+					exit = InspectLocation(1,0);
 
 				//Check up
-				else if (IsSpace(InspectLocation(-1, 0)))
-				{
-					Path.Push(new Point(Path.Top().Row - 1, Path.Top().Column));
-					SetChar('V');
-				}
+				else if (IsSpace(GetChar(-1, 0)))
+					exit = InspectLocation(-1, 0);
 
 				else 
 					Path.Pop();
+
+				if (exit)
+				{
+					tempPath = Path;
+
+					Point point;
+					for(int i = 0; i < Path.Size; i++)
+					{
+						point = Path.Pop();
+						tempPath.Push(point);
+						SetChar('.');
+
+					}
+				}
 			}
-			
-			return PrintMaze();
+
+			Path = tempPath;
+			Console.WriteLine(Path);
+			return $"{TestMessage}{PrintMaze()}";
 		}
 
 		public Stack<Point> GetPathToFollow()
@@ -118,29 +124,37 @@ namespace assignment_2_stack
 			throw new ApplicationException();
 		}
 
-		private char InspectLocation(int rowModifier, int columnModifier)
-		{	
-			if (rowModifier != 0 && 1 == Math.Abs(rowModifier))
-			{
-				return CharMaze[Path.Top().Row + rowModifier][Path.Top().Column];
-			}
-
-			if (columnModifier != 0 && 1 == Math.Abs(columnModifier))
-			{
-				return CharMaze[Path.Top().Row][Path.Top().Column + columnModifier];
-			}
-
-			else
-				throw new ApplicationException();
-		}
-
-		//Returns true if param is a ' '
 		private static bool IsSpace(char target) => target == ' ';
+		private static bool IsExit(char target) => target == 'E';
 
-		//Sets the char at a given position to a specific char
+		private char GetChar(int rowModifier, int columnModifier)
+		{
+			char character = '_';
+			if (rowModifier != 0 && 1 == Math.Abs(rowModifier))
+				 character = CharMaze[Path.Top().Row + rowModifier][Path.Top().Column];
+
+			else if (columnModifier != 0 && 1 == Math.Abs(columnModifier))
+				character = CharMaze[Path.Top().Row][Path.Top().Column + columnModifier];
+
+			else if (rowModifier == 0 && columnModifier == 0)
+				character = CharMaze[Path.Top().Row][Path.Top().Column];
+
+			return character;
+		}
+		
 		private void SetChar(char character)
 		{
 			CharMaze[Path.Top().Row][Path.Top().Column] = character;
+		}
+		
+		private bool InspectLocation(int rowModifier, int columnModifier)
+		{
+			bool exit = false;
+			if (IsExit(GetChar(0, 0)))
+				exit = true;
+			Path.Push(new Point(Path.Top().Row + (rowModifier), Path.Top().Column + (columnModifier)));
+			SetChar('V');
+			return exit;
 		}
 	}
 }
