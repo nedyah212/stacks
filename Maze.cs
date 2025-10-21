@@ -72,57 +72,45 @@ namespace assignment_2_stack
 		{
 			Point currentPosition = StartingPoint;
 			Path.Push(currentPosition);
-			SetChar(Path.Top(), 'V');
-			int count;
+			SetChar('V');
+			bool exit = false;
 
-			while (!Path.IsEmpty() == false)
-			{
-				count = 0;
-				currentPosition = Path.Top();
-
+			while (!Path.IsEmpty() || exit == false)
+			{	
+	
 				//Check left
 				if (IsSpace(InspectLocation(0, -1)))
 				{
-					Point point = new Point(Path.Top().Row, Path.Top().Column - 1);
-					Path.Push(point);
-					SetChar(Path.Top(), 'V');
+					Path.Push(new Point(Path.Top().Row, Path.Top().Column - 1));
+					SetChar('V');
 				}
-				else count += 1;
 
 				//Check right
-				if (IsSpace(InspectLocation(0, 1)))
+				else if (IsSpace(InspectLocation(0, 1)))
 				{
-					Point point = new Point(Path.Top().Row, Path.Top().Column - 1);
-					Path.Push(point);
-					SetChar(Path.Top(), 'V');
+					Path.Push(new Point(Path.Top().Row, Path.Top().Column + 1));
+					SetChar('V');
 				}
-				else count += 1;
 
 				//Check down
-				if (IsSpace(InspectLocation(1, 0)))
+				else if (IsSpace(InspectLocation(1, 0)))
 				{
-					Point point = new Point(Path.Top().Row, Path.Top().Column - 1);
-					Path.Push(point);
-					SetChar(Path.Top(), 'V');
+					Path.Push(new Point(Path.Top().Row + 1, Path.Top().Column));
+					SetChar('V');
 				}
-				else count += 1;
 
 				//Check up
-				if (IsSpace(InspectLocation(-1, 0)))
+				else if (IsSpace(InspectLocation(-1, 0)))
 				{
-					Point point = new Point(Path.Top().Row, Path.Top().Column - 1);
-					Path.Push(point);
-					SetChar(Path.Top(), 'V');
+					Path.Push(new Point(Path.Top().Row - 1, Path.Top().Column));
+					SetChar('V');
 				}
-				else count += 1;
 
-				if (count == 3)
-				{
+				else 
 					Path.Pop();
-				}
 			}
 			
-			return "string";
+			return PrintMaze();
 		}
 
 		public Stack<Point> GetPathToFollow()
@@ -130,28 +118,29 @@ namespace assignment_2_stack
 			throw new ApplicationException();
 		}
 
-		//Points towards a location, checking what the 
 		private char InspectLocation(int rowModifier, int columnModifier)
 		{	
-			char character = '-';
-			if (rowModifier != 0)
+			if (rowModifier != 0 && 1 == Math.Abs(rowModifier))
 			{
-				character = CharMaze[Path.Top().Row + rowModifier][Path.Top().Column];
+				return CharMaze[Path.Top().Row + rowModifier][Path.Top().Column];
 			}
-			if (columnModifier != 0)
+
+			if (columnModifier != 0 && 1 == Math.Abs(columnModifier))
 			{
-				character = CharMaze[Path.Top().Row][Path.Top().Column + columnModifier];
+				return CharMaze[Path.Top().Row][Path.Top().Column + columnModifier];
 			}
-			return character;
+
+			else
+				throw new ApplicationException();
 		}
 
 		//Returns true if param is a ' '
 		private static bool IsSpace(char target) => target == ' ';
 
 		//Sets the char at a given position to a specific char
-		private void SetChar(Point position, Char character)
+		private void SetChar(char character)
 		{
-			CharMaze[position.Row][position.Column] = character;
+			CharMaze[Path.Top().Row][Path.Top().Column] = character;
 		}
 	}
 }
