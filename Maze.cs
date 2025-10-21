@@ -138,24 +138,8 @@ namespace assignment_2_stack
 
 			if (Path.IsEmpty())
 				return new Stack<Point>();
-
-			Stack<Point> tempStack = new Stack<Point>();
-			Stack<Point> copyPath = new Stack<Point>();
-			int pathSize = Path.Size;
-
-			for (int i = 0; i < pathSize; i++)
-			{
-				tempStack.Push(Path.Pop());
-			}
-
-			for (int i = 0; i < pathSize; i++)
-			{
-				Point point = tempStack.Pop();
-				Path.Push(point);
-				copyPath.Push(point);
-			}
-
-			return copyPath;
+				
+			return Path.Copy(Path.Size);
 		}
 
 		private static bool IsSpace(char target) => target == ' ';

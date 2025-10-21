@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 namespace assignment_2_stack
 {
 	public class Stack<T>
-	{	
+	{
 		public int Size { get; set; }
 		public Node<T> Head { get; set; }
 		public Stack() => Clear();
 
 		public bool IsEmpty() => Size == 0;
 		public void Clear() => (Size, Head) = (0, null);
-		
-		public void Push(T element) 
+
+		public void Push(T element)
 		{
-			Node<T> newHead = new Node<T>(element,Head);
+			Node<T> newHead = new Node<T>(element, Head);
 			Head = newHead;
 			Size++;
 		}
@@ -26,7 +26,7 @@ namespace assignment_2_stack
 		{
 			if (IsEmpty())
 				throw new ApplicationException();
-		
+
 			return Head.Element;
 		}
 
@@ -38,6 +38,25 @@ namespace assignment_2_stack
 			return element;
 		}
 
+		public Stack<T> Copy(int pathSize)
+		{
 
+			Stack<T> temp = new Stack<T>();
+			Stack<T> copy = new Stack<T>();
+
+			for (int i = 0; i < pathSize; i++)
+			{
+				temp.Push(Pop());
+			}
+
+			for (int i = 0; i < pathSize; i++)
+			{
+				T point = temp.Pop();
+				Push(point);
+				copy.Push(point);
+			}
+
+			return copy;
+		}
 	}
 }
