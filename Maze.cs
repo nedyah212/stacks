@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,8 @@ namespace assignment_2_stack
 
 		private string TestMessage = "No exit found in maze!\n\n";
 		private bool ExitStatus = false;
+
+		private bool HasSearched = false;
 
 		public Maze(string filename)
 		{
@@ -73,11 +76,12 @@ namespace assignment_2_stack
 
 		public string DepthFirstSearch()
 		{
-			Console.WriteLine(PrintMaze());
+			HasSearched = true; 
 			Point currentPosition = StartingPoint;
 			Path.Push(currentPosition);
 			CharMaze[Path.Top().Row][Path.Top().Column] = 'V';
-			Stack<Point> copyPath = new Stack<Point>();
+			Stack<Point> tempStack1 = new Stack<Point>();
+
 			while (!Path.IsEmpty())
 			{
 				//Check down
@@ -99,32 +103,59 @@ namespace assignment_2_stack
 				{
 					int pathSize = Path.Size;
 					Point point;
-					TestMessage = ($"Path to follow from Start {StartingPoint.ToString()} to Exit {Path.Top()} - 27 steps:\n");
+					TestMessage = ($"Path to follow from Start {StartingPoint.ToString()} to Exit {Path.Top()} - {pathSize} steps:\n");
 
 					for (int i = 0; i < pathSize; i++)
 					{
 						point = Path.Pop();
-						copyPath.Push(point);
+						tempStack1.Push(point);
 						if (CharMaze[point.Row][point.Column] != 'E')
 							CharMaze[point.Row][point.Column] = '.';
 					}
 
+					Stack<Point> tempStack2 = new Stack<Point>();
 					for (int i = 0; i < pathSize; i++)
 					{
-						point = copyPath.Pop();
+						point = tempStack1.Pop();
 						TestMessage += $"{point.ToString()}\n";
+						tempStack2.Push(point);
+					}
+
+					for (int i = 0; i < pathSize; i++)
+					{
+						tempStack1.Push(tempStack2.Pop());
 					}
 				}
 			}
-			Console.WriteLine(PrintMaze());
-			Path = copyPath;
-
+			Path = tempStack1;
 			return $"{TestMessage}{PrintMaze()}";
 		}
 
 		public Stack<Point> GetPathToFollow()
 		{
-			throw new ApplicationException();
+			if (!HasSearched)
+				throw new ApplicationException();
+
+			if (Path.IsEmpty())
+				return new Stack<Point>();
+
+			Stack<Point> tempStack = new Stack<Point>();
+			Stack<Point> copyPath = new Stack<Point>();
+			int pathSize = Path.Size;
+
+			for (int i = 0; i < pathSize; i++)
+			{
+				tempStack.Push(Path.Pop());
+			}
+
+			for (int i = 0; i < pathSize; i++)
+			{
+				Point point = tempStack.Pop();
+				Path.Push(point);
+				copyPath.Push(point);
+			}
+
+			return copyPath;
 		}
 
 		private static bool IsSpace(char target) => target == ' ';
