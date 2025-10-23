@@ -15,10 +15,9 @@ namespace assignment_2_stack
 
 		private char[][] CharMaze;
 		private Stack<Point> Path;
-
+		
 		private string TestMessage = "No exit found in maze!\n\n";
 		private bool ExitStatus = false;
-
 		private bool HasSearched = false;
 
 		public Maze(string filename)
@@ -140,11 +139,14 @@ namespace assignment_2_stack
 		private char GetChar(int rowModifier, int columnModifier)
 		{
 			char character = '_';
-			if (rowModifier != 0 && 1 == Math.Abs(rowModifier))
+			if (rowModifier != 0 && 1 == Math.Abs(rowModifier) && columnModifier == 0)
 				 character = CharMaze[Path.Top().Row + rowModifier][Path.Top().Column];
 
-			else if (columnModifier != 0 && 1 == Math.Abs(columnModifier))
+			else if (columnModifier != 0 && 1 == Math.Abs(columnModifier) && rowModifier == 0)
 				character = CharMaze[Path.Top().Row][Path.Top().Column + columnModifier];
+
+			else
+				throw new IndexOutOfRangeException();
 
 			return character;
 		}
